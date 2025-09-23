@@ -440,27 +440,6 @@ alembic upgrade head
 
 ## Troubleshooting
 
-### Common Issues
-
-1. **Database Connection Errors**:
-   - Check database service is running
-   - Verify database URL in environment variables
-   - Ensure Docker containers are properly connected
-
-2. **API Key Issues**:
-   - Verify API keys in `.env` file
-   - Check service availability for external APIs
-
-3. **Docker Issues**:
-   - Rebuild containers: `docker compose up -d --build`
-   - Clear volumes if needed: `docker compose down -v`
-
-### Debugging Tips
-
-1. Enable debug logging by setting `DEBUG=true` in `.env`
-2. Check container logs: `docker compose logs <service-name>`
-3. Use the `/healthz` endpoint to verify service status
-4. Test individual endpoints with the provided test script
 
 ## Contributing
 
