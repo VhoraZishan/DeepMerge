@@ -130,18 +130,23 @@ The API will be available at `http://localhost:8000` with documentation at `/doc
 
 ### Molecular Data
 - `GET /api/v1/molecular/edna` - Get eDNA studies
+- `POST /api/v1/molecular/blast` - BLAST-like k-mer similarity search
 
 ### AI Integration
 - `POST /api/v1/ai/query` - Natural language query processing
 - `GET /api/v1/ai/summary` - AI-generated data summaries
 - `POST /api/v1/ai/anomalies` - Anomaly detection in data
 - `GET /api/v1/ai/examples` - Example queries
+- `GET /api/v1/ai/sql` - Generate SQL from a natural question
+- `POST /api/v1/ai/viz/suggest` - Suggest visualization spec
 
 ### WebSocket
 - `GET /ws/live` - Real-time data streaming
+- `GET /ws/status` - WebSocket status
 
 ### GraphQL
-- `GET /api/v1/graphql` - GraphQL endpoint
+- `POST /api/v1/graphql` - GraphQL endpoint (use JSON body: `{ query, variables }`)
+- `GET /api/v1/graphql/` - GraphiQL-compatible endpoint in browser
 
 ## Data Models
 
@@ -342,6 +347,21 @@ docker compose down
 4. **MinIO**: Object storage for raw data files
 
 ### Environment Configuration
+## Security & Auth
+
+- JWT (demo): `GET /api/v1/auth/token/example?role=admin` to mint a short-lived token.
+- Use `Authorization: Bearer <token>` for secured routes (e.g., `/api/v1/auth/admin/ping`).
+- RBAC roles: `scientist`, `policymaker`, `admin`.
+
+## Migrations (TimescaleDB & PostGIS)
+
+- Enable extensions and hypertables via Alembic:
+```bash
+poetry run alembic upgrade head
+```
+- `0001_enable_extensions`: installs PostGIS & TimescaleDB
+- `0002_timescale_hypertables`: converts `oceanography_records` to hypertable and creates a daily cagg
+
 Configure deployment through environment variables in `.env`:
 - Database connection strings
 - API keys for external services

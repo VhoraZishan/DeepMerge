@@ -18,7 +18,7 @@ asyncpg = "^0.29.0"
 sqlalchemy = {version = "^2.0.32", extras=["asyncio"]}
 alembic = "^1.13.2"
 psycopg-binary = "^3.2.1"
-python-jose = {version = "^3.3.0", extras=["cryptography"]}
+python-jose = {extras = ["cryptography"], version = "^3.5.0"}
 passlib = {version = "^1.7.4", extras=["bcrypt"]}
 redis = "^5.0.7"
 celery = "^5.4.0"
@@ -33,6 +33,7 @@ loguru = "^0.7.2"
 requests = "^2.32.5"
 numpy = "^2.3.3"
 netcdf4 = "^1.7.2"
+xarray = "^2025.9.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.8.0"

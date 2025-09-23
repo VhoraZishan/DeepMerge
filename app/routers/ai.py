@@ -84,7 +84,11 @@ async def get_query_examples():
 async def suggest_sql(question: str = Query(...)):
 	"""Generate SQL for TimescaleDB from a natural question (LLM-assisted)."""
 	try:
-		return {"sql": await query_processor.suggest_sql_query(question)}
+		sql = await query_processor.suggest_sql_query(question)
+		if not sql or "LLM disabled" in sql:
+			# Provide a safe fallback SQL example
+			sql = "SELECT time_bucket('1 day', timestamp) AS day, avg(value) AS mean_sst FROM oceanography_records WHERE parameter='sst' GROUP BY day ORDER BY day;"
+		return {"sql": sql}
 	except Exception as e:
 		raise HTTPException(status_code=500, detail=f"SQL suggestion failed: {str(e)}")
 
@@ -93,6 +97,10 @@ async def suggest_sql(question: str = Query(...)):
 async def suggest_viz(question: str = Query(...), fields: list[str] = Body(...)):
 	"""Suggest visualization spec based on question and available fields."""
 	try:
-		return await query_processor.suggest_visualization(question, fields)
+		spec = await query_processor.suggest_visualization(question, fields)
+		# Ensure a minimal spec if LLM not configured
+		if not spec or "spec" not in spec:
+			spec = {"spec": {"type": "line", "x": fields[:1], "y": fields[1:2]}}
+		return spec
 	except Exception as e:
 		raise HTTPException(status_code=500, detail=f"Viz suggestion failed: {str(e)}")

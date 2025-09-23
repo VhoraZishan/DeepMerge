@@ -1,2 +1,2 @@
-eventDate,stateProvince,recordedBy,decimalLatitude,license,country,scientificName,occurrenceID,basisOfRecord,decimalLongitude
-2024-01-15T00:00:00Z,,IBP,10.1,CC-BY-4.0,India,Sardinella longiceps,,HumanObservation,75.2
+eventDate,decimalLatitude,decimalLongitude,basisOfRecord,recordedBy,occurrenceID,country,scientificName,stateProvince,license
+2024-01-15T00:00:00Z,10.1,75.2,HumanObservation,IBP,,India,Sardinella longiceps,,CC-BY-4.0
