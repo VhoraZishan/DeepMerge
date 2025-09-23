@@ -174,5 +174,5 @@ class Query(ObjectType):
 # Create GraphQL schema
 schema = Schema(query=Query)
 
-# Add GraphQL endpoint
+# Add GraphQL endpoint (trailing slash)
 router.add_route("/", GraphQLApp(schema=schema), methods=["GET", "POST"])

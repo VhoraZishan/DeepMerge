@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Query, HTTPException
+from fastapi import APIRouter, Query, HTTPException, Body
 from app.services.llm.query_processor import QueryProcessor
 from app.core.settings import get_settings
 
@@ -79,3 +79,20 @@ async def get_query_examples():
 		"supported_regions": ["kerala", "tamil_nadu", "karnataka", "goa", "india"]
 	}
 
+
+@router.get("/sql")
+async def suggest_sql(question: str = Query(...)):
+	"""Generate SQL for TimescaleDB from a natural question (LLM-assisted)."""
+	try:
+		return {"sql": await query_processor.suggest_sql_query(question)}
+	except Exception as e:
+		raise HTTPException(status_code=500, detail=f"SQL suggestion failed: {str(e)}")
+
+
+@router.post("/viz/suggest")
+async def suggest_viz(question: str = Query(...), fields: list[str] = Body(...)):
+	"""Suggest visualization spec based on question and available fields."""
+	try:
+		return await query_processor.suggest_visualization(question, fields)
+	except Exception as e:
+		raise HTTPException(status_code=500, detail=f"Viz suggestion failed: {str(e)}")

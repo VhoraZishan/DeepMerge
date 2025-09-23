@@ -172,3 +172,23 @@ class QueryProcessor:
 		except:
 			return f"Anomaly detection unavailable for {data_type} data."
 
+	async def suggest_sql_query(self, question: str) -> str:
+		"""LLM-assisted SQL generation stub for TimescaleDB."""
+		prompt = f"Generate a SQL query for TimescaleDB to answer: {question}"
+		try:
+			return await self.gemini.query(prompt)
+		except:
+			return "SELECT 1;"
+
+	async def suggest_visualization(self, question: str, fields: List[str]) -> Dict[str, Any]:
+		"""Return a suggested chart spec (type + axes) for the question and fields."""
+		prompt = (
+			"Suggest a visualization type and axes given the question and fields. "
+			f"Question: {question}. Fields: {fields}."
+		)
+		try:
+			spec = await self.gemini.query(prompt)
+			return {"spec": spec}
+		except:
+			return {"spec": {"type": "line", "x": fields[:1], "y": fields[1:2]}}
+

@@ -1,5 +1,6 @@
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Query, Body
 from app.ingestion.ncbi import NCBIClient, NCBIRecord
+from app.services.molecular.blast import simple_kmer_similarity
 
 router = APIRouter(prefix="/molecular", tags=["molecular"])
 
@@ -25,4 +26,18 @@ async def search_marine_edna(
 			"error": str(e),
 			"note": "NCBI E-utilities may be rate-limited"
 		}
+
+
+@router.post("/blast")
+async def blast_like_search(
+	query_sequence: str = Body(..., embed=True),
+	reference_sequences: list[dict[str, str]] = Body(
+		..., embed=True, description="List of {name, sequence} objects"
+	),
+	k: int = Query(7, ge=3, le=15),
+	top_k: int = Query(5, ge=1, le=50),
+):
+	"""Lightweight BLAST-like search using k-mer Jaccard similarity (for prototyping)."""
+	results = simple_kmer_similarity(query_sequence, reference_sequences, k=k, top_k=top_k)
+	return {"results": results, "k": k, "top_k": top_k}
 

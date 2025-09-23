@@ -14,6 +14,8 @@
 11. [Testing](#testing)
 12. [Deployment](#deployment)
 13. [Development Workflow](#development-workflow)
+14. [Standards & Interoperability](#standards--interoperability)
+15. [Roadmap](#roadmap)
 
 ## Project Overview
 
@@ -448,6 +450,26 @@ alembic upgrade head
 3. Update documentation when adding new features
 4. Submit pull requests for review
 5. Ensure all tests pass before merging
+
+## Standards & Interoperability
+
+This project aligns with domain standards to ensure interoperability with global portals and tools across oceanography, biodiversity, fisheries, and molecular biology.
+
+- **Biodiversity metadata (Darwin Core/DwC)**: Use DwC terms for occurrence records and observations for compatibility with OBIS/GBIF export pipelines. Map fields such as `scientificName`, `eventDate`, `decimalLatitude`, `decimalLongitude`, `recordedBy`, `basisOfRecord`.
+- **Oceanography data (CF/ERDDAP)**: Prefer CF-compliant NetCDF for gridded/time-series; follow ERDDAP conventions for variable/attribute naming (e.g., `sea_surface_temperature`, `units="degree_C"`, `standard_name`).
+- **Molecular data (GenBank/ENA alignment)**: Align eDNA study metadata with `bioproject`, `biosample`, `instrument_model`, `library_strategy`, `target_gene`, `primer_sequence`, `taxon_id` to enable downstream submission and cross-links.
+- **Geospatial**: Use WGS84 (`EPSG:4326`) as default CRS; expose GeoJSON in APIs; plan PostGIS indexes for spatial queries.
+- **Time-series (TimescaleDB)**: Use hypertables for high-ingest data and define retention and continuous aggregates for performant analytics.
+- **Validation & QA/QC**: Use Pydantic for IO validation and Great Expectations suites at ingestion for missing values, ranges, units, and outlier checks.
+
+Implementation notes:
+- Add term mappings in `schemas/` and `models/` docstrings to clarify DwC/CF alignment.
+- Provide export utilities for OBIS/GBIF and CF-compliant NetCDF where appropriate.
+- Track provenance (`source`, `processing_level`, `license`) across domains.
+
+## Roadmap
+
+See `ROADMAP.md` for actionable milestones: correlation engine, geospatial visualization, otolith morphology analysis, eDNA workflows (BLAST-like search, QIIME2/DADA2), cloud scalability (Kubernetes, Kafka), AI-assisted SQL/visualization, RBAC, and enhanced testing/validation.
 
 ## Additional Resources
 
